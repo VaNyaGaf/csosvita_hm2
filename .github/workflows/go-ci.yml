@@ -9,9 +9,8 @@ on:
       - main
 
 jobs:
-  build-test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,13 +18,36 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22' # Specify your desired Go version
+          go-version: '1.22'
 
       - name: Build
         run: go build -v ./...
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build   # run after build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
       - name: Test
         run: go test -v ./...
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
 
       - name: Lint
         run: |
